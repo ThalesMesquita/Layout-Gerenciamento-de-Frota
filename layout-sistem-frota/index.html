@@ -18,7 +18,7 @@
     <div class="sidebar">
         <div class="sidebar-header">
             <i class="fas fa-truck-fast logo-icon"></i>
-            <span class="logo-text">FleetFlow</span>
+            <span class="logo-text">GERFORT</span>
         </div>
         <ul class="sidebar-menu">
             <li><a href="#" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
@@ -30,7 +30,7 @@
             <li><a href="#"><i class="fas fa-chart-bar"></i> Relatórios</a></li>
         </ul>
         <div class="sidebar-footer">
-             <a href="#"><i class="fas fa-cog"></i> Configurações</a>
+            <a href="#"><i class="fas fa-cog"></i> Configurações</a>
         </div>
     </div>
 
@@ -45,7 +45,7 @@
                 <div class="user-profile">
                     <img src="https://i.pravatar.cc/40" alt="Avatar do Usuário">
                     <div class="user-details">
-                        <span class="user-name">Thales Suporte</span>
+                        <span class="user-name">Thales</span>
                         <span class="user-role">Administrador</span>
                     </div>
                     <i class="fas fa-chevron-down"></i>
@@ -120,45 +120,7 @@
                                 <th class="actions-column">Ações</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <span class="text-primary">GRL-3178</span>
-                                    <span class="text-secondary">Nome Personalizado</span>
-                                </td>
-                                <td>
-                                    <span class="text-primary">Dodge</span>
-                                    <span class="text-secondary">STEALTH 2000</span>
-                                </td>
-                                <td>Operações</td>
-                                <td>150.234 km</td>
-                                <td><span class="status-badge status-active">Ativo</span></td>
-                                <td class="actions-cell">
-                                    <button class="action-btn" data-tooltip="Editar"><i class="fas fa-pencil-alt"></i></button>
-                                    <button class="action-btn" data-tooltip="Visualizar"><i class="fas fa-eye"></i></button>
-                                    <button class="action-btn" data-tooltip="Desabilitar"><i class="fas fa-toggle-on status-active"></i></button>
-                                    <button class="action-btn" data-tooltip="Dar Baixa"><i class="fas fa-archive"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <span class="text-primary">PHN-1507</span>
-                                    <span class="text-secondary">Veículo de Teste</span>
-                                </td>
-                                <td>
-                                    <span class="text-primary">Audi</span>
-                                    <span class="text-secondary">R8 2025</span>
-                                </td>
-                                <td>Logística</td>
-                                <td>120 km</td>
-                                <td><span class="status-badge status-inactive">Desabilitado</span></td>
-                                <td class="actions-cell">
-                                    <button class="action-btn" data-tooltip="Editar"><i class="fas fa-pencil-alt"></i></button>
-                                    <button class="action-btn" data-tooltip="Visualizar"><i class="fas fa-eye"></i></button>
-                                    <button class="action-btn" data-tooltip="Habilitar"><i class="fas fa-toggle-off status-inactive"></i></button>
-                                    <button class="action-btn" data-tooltip="Dar Baixa"><i class="fas fa-archive"></i></button>
-                                </td>
-                            </tr>
+                        <tbody id="vehicle-table-body">                           
                             </tbody>
                     </table>
                 </div>
@@ -177,4 +139,7 @@
 
     <script src="script.js"></script>
 </body>
+</html>
+</body>
+
 </html>
