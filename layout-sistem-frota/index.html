@@ -93,19 +93,22 @@
                 <div class="filter-bar">
                     <div class="search-wrapper">
                         <i class="fas fa-search"></i>
-                        <input type="text" placeholder="Buscar por nome, placa ou modelo...">
+                        <input type="text" id="search-input" placeholder="Buscar por nome, placa ou modelo...">
                     </div>
-                    <select>
+                    <select id="status-filter">
                         <option value="">Status</option>
-                        <option value="ativo">Ativo</option>
-                        <option value="inativo">Inativo</option>
+                        <option value="Ativo">Ativo</option>
+                        <option value="Desabilitado">Desabilitado</option>
                     </select>
-                    <select>
+                    <select id="sector-filter">
                         <option value="">Setor</option>
-                        <option value="operacoes">Operações</option>
-                        <option value="logistica">Logística</option>
+                        <option value="Diretoria">Diretoria</option>
+                        <option value="Vendas">Vendas</option>
+                        <option value="Logística">Logística</option>
+                        <option value="Operações">Operações</option>
+                        <option value="Manutenção">Manutenção</option>
                     </select>
-                    <button class="btn btn-outline">Limpar Filtros</button>
+                    <button class="btn btn-outline" id="clear-filters-btn">Limpar Filtros</button>
                 </div>
 
                 <div class="table-responsive">
