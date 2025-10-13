@@ -39,22 +39,6 @@ Font Awesome: Para a biblioteca de ícones vetoriais.
 
 Google Fonts: Para a tipografia do projeto.
 
-⚙️ Como Executar o Projeto
-Este projeto é puramente front-end e não requer nenhuma instalação ou build complexo.
-
-Clone o repositório:
-
-Bash
-
-git clone https://github.com/seu-usuario/seu-repositorio.git
-Navegue até a pasta do projeto:
-
-Bash
-
-cd seu-repositorio
-Abra o arquivo index.html no seu navegador preferido.
-
-E pronto! A interface estará funcionando.
 
 📂 Estrutura de Arquivos
 /
