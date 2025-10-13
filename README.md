@@ -39,12 +39,6 @@ Font Awesome: Para a biblioteca de ícones vetoriais.
 
 Google Fonts: Para a tipografia do projeto.
 
-
-📂 Estrutura de Arquivos
-/
-├── index.html      # Arquivo principal da estrutura da página
-├── style.css       # Folha de estilos para o layout
-└── script.js       # Código JavaScript para interatividade
 🎨 Princípios de Design Aplicados
 Clareza e Simplicidade (Clean Design): Foco em remover o ruído visual e apresentar apenas as informações e ações essenciais de forma clara.
 
