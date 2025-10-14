@@ -59,11 +59,22 @@ function updateSortIcons() {
 function updateSummaryCards() {
     const totalVehicles = vehiclesData.length;
     const activeVehicles = vehiclesData.filter(v => v.status === 'Ativo').length;
-    const disabledVehicles = totalVehicles - activeVehicles; // Pode ser calculado assim também
-
+    const disabledVehicles = totalVehicles - activeVehicles;
     document.getElementById('total-vehicles-summary').innerText = totalVehicles;
     document.getElementById('active-vehicles-summary').innerText = activeVehicles;
     document.getElementById('disabled-vehicles-summary').innerText = disabledVehicles;
+}
+
+function updatePaginationSummary(filteredVehicles) {
+    const totalResults = filteredVehicles.length;
+    const paginationSpan = document.getElementById('pagination-summary');
+    if (totalResults === 0) {
+        paginationSpan.innerText = 'Nenhum resultado encontrado';
+    } else if (totalResults === 1) {
+        paginationSpan.innerText = 'Exibindo 1 de 1 resultado';
+    } else {
+        paginationSpan.innerText = `Exibindo 1-${totalResults} de ${totalResults} resultados`;
+    }
 }
 
 function applyFiltersAndSort() {
@@ -81,9 +92,9 @@ function applyFiltersAndSort() {
         processedVehicles = processedVehicles.filter(v => v.setor === sectorFilter);
     }
     processedVehicles = sortData(processedVehicles);
-    
     renderTable(processedVehicles);
-    updateSummaryCards(); // <-- AQUI ESTÁ A CHAMADA CORRETA
+    updateSummaryCards();
+    updatePaginationSummary(processedVehicles);
     initializeTooltips();
     updateSortIcons();
 }
@@ -95,33 +106,175 @@ function clearAndApplyFilters() {
     applyFiltersAndSort();
 }
 
-function initializeTooltips() { /* (código completo inalterado) */ }
+function initializeTooltips() {
+    const tooltippedElements = document.querySelectorAll('[data-tooltip]');
+    let tooltip = document.querySelector('.tooltip');
+    if (!tooltip) {
+        tooltip = document.createElement('div');
+        tooltip.classList.add('tooltip');
+        document.body.appendChild(tooltip);
+    }
+    document.querySelectorAll('[data-tooltip]').forEach(elem => {
+        elem.addEventListener('mouseover', () => {
+            const tooltipText = elem.getAttribute('data-tooltip');
+            tooltip.innerText = tooltipText;
+            tooltip.style.display = 'block';
+            const rect = elem.getBoundingClientRect();
+            tooltip.style.left = `${rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2)}px`;
+            tooltip.style.top = `${rect.top - tooltip.offsetHeight - 8}px`;
+        });
+        elem.addEventListener('mouseleave', () => {
+            tooltip.style.display = 'none';
+        });
+    });
+}
+
+// --- LÓGICA DO MODAL ---
 const modalOverlay = document.getElementById('modal-overlay');
 const vehicleForm = document.getElementById('vehicle-form');
 const modalTitle = document.getElementById('modal-title');
 const vehicleIdInput = document.getElementById('vehicle-id');
-function openModal(mode, vehicleData = null) { /* (código completo inalterado) */ }
-function closeModal() { /* (código completo inalterado) */ }
-function handleFormSubmit(event) { /* (código completo inalterado) */ }
-function addEditButtonListeners() { /* (código completo inalterado) */ }
-function addToggleStatusButtonListeners() { /* (código completo inalterado) */ }
-function addDeleteButtonListeners() { /* (código completo inalterado) */ }
-function showToast(message, type = 'success') { /* (código completo inalterado) */ }
-document.addEventListener('DOMContentLoaded', () => { /* (código completo inalterado) */ });
-if (!document.querySelector('#tooltip-styles')) { /* (código completo inalterado) */ }
 
+function openModal(mode, vehicleData = null) {
+    vehicleForm.reset();
+    if (mode === 'create') {
+        modalTitle.innerText = 'Cadastrar Novo Veículo';
+        vehicleIdInput.value = '';
+    } else if (mode === 'edit') {
+        modalTitle.innerText = 'Editar Veículo';
+        vehicleIdInput.value = vehicleData.id;
+        document.getElementById('placa').value = vehicleData.placa;
+        document.getElementById('nomePersonalizado').value = vehicleData.nomePersonalizado;
+        document.getElementById('marca').value = vehicleData.marca;
+        document.getElementById('modelo').value = vehicleData.modelo;
+        document.getElementById('setor').value = vehicleData.setor;
+        document.getElementById('hodometro').value = vehicleData.hodometro;
+        document.getElementById('status').value = vehicleData.status;
+    }
+    modalOverlay.classList.add('visible');
+}
 
-// ===================================================================================
-// VERSÃO COMPLETA E CORRIGIDA DO SCRIPT.JS PARA REFERÊNCIA (COLE ESTA VERSÃO)
-// ===================================================================================
+function closeModal() {
+    modalOverlay.classList.remove('visible');
+}
 
-function initializeTooltips() { const tooltippedElements = document.querySelectorAll('[data-tooltip]'); let tooltip = document.querySelector('.tooltip'); if (!tooltip) { tooltip = document.createElement('div'); tooltip.classList.add('tooltip'); document.body.appendChild(tooltip); } document.querySelectorAll('[data-tooltip]').forEach(elem => { elem.addEventListener('mouseover', () => { const tooltipText = elem.getAttribute('data-tooltip'); tooltip.innerText = tooltipText; tooltip.style.display = 'block'; const rect = elem.getBoundingClientRect(); tooltip.style.left = `${rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2)}px`; tooltip.style.top = `${rect.top - tooltip.offsetHeight - 8}px`; }); elem.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; }); }); }
-function openModal(mode, vehicleData = null) { vehicleForm.reset(); if (mode === 'create') { modalTitle.innerText = 'Cadastrar Novo Veículo'; vehicleIdInput.value = ''; } else if (mode === 'edit') { modalTitle.innerText = 'Editar Veículo'; vehicleIdInput.value = vehicleData.id; document.getElementById('placa').value = vehicleData.placa; document.getElementById('nomePersonalizado').value = vehicleData.nomePersonalizado; document.getElementById('marca').value = vehicleData.marca; document.getElementById('modelo').value = vehicleData.modelo; document.getElementById('setor').value = vehicleData.setor; document.getElementById('hodometro').value = vehicleData.hodometro; document.getElementById('status').value = vehicleData.status; } modalOverlay.classList.add('visible'); }
-function closeModal() { modalOverlay.classList.remove('visible'); }
-function handleFormSubmit(event) { event.preventDefault(); const formData = { id: vehicleIdInput.value ? parseInt(vehicleIdInput.value) : Date.now(), placa: document.getElementById('placa').value, nomePersonalizado: document.getElementById('nomePersonalizado').value, marca: document.getElementById('marca').value, modelo: document.getElementById('modelo').value, setor: document.getElementById('setor').value, hodometro: parseInt(document.getElementById('hodometro').value), status: document.getElementById('status').value, }; if (vehicleIdInput.value) { const index = vehiclesData.findIndex(v => v.id === formData.id); vehiclesData[index] = formData; showToast('Veículo atualizado com sucesso!', 'success'); } else { vehiclesData.push(formData); showToast('Veículo cadastrado com sucesso!', 'success'); } closeModal(); clearAndApplyFilters(); }
-function addEditButtonListeners() { document.querySelectorAll('.edit-btn').forEach(button => { button.addEventListener('click', (event) => { const row = event.target.closest('tr'); const vehicleId = parseInt(row.getAttribute('data-id')); const vehicle = vehiclesData.find(v => v.id === vehicleId); if (vehicle) { openModal('edit', vehicle); } }); }); }
-function addToggleStatusButtonListeners() { document.querySelectorAll('.toggle-status-btn').forEach(button => { button.addEventListener('click', (event) => { const row = event.target.closest('tr'); const vehicleId = parseInt(row.getAttribute('data-id')); const vehicle = vehiclesData.find(v => v.id === vehicleId); if (vehicle) { vehicle.status = (vehicle.status === 'Ativo') ? 'Desabilitado' : 'Ativo'; showToast(`Status do veículo ${vehicle.placa} alterado para ${vehicle.status}!`, 'success'); applyFiltersAndSort(); } }); }); }
-function addDeleteButtonListeners() { document.querySelectorAll('.delete-btn').forEach(button => { button.addEventListener('click', (event) => { const row = event.target.closest('tr'); const vehicleId = parseInt(row.getAttribute('data-id')); const vehicle = vehiclesData.find(v => v.id === vehicleId); if (vehicle) { const wantsToDelete = confirm(`Você tem certeza que deseja excluir o veículo de placa ${vehicle.placa}? Esta ação não pode ser desfeita.`); if (wantsToDelete) { vehiclesData = vehiclesData.filter(v => v.id !== vehicleId); showToast(`Veículo ${vehicle.placa} excluído com sucesso!`, 'success'); applyFiltersAndSort(); } } }); }); }
-function showToast(message, type = 'success') { const toast = document.getElementById('toast-notification'); const toastMessage = document.getElementById('toast-message'); const toastIcon = toast.querySelector('.toast-icon'); toastMessage.innerText = message; toast.className = `toast ${type}`; toastIcon.className = `toast-icon fas ${type === 'success' ? 'fa-check-circle' : 'fa-times-circle'}`; toast.classList.add('show'); setTimeout(() => { toast.classList.remove('show'); }, 3000); }
-document.addEventListener('DOMContentLoaded', () => { document.getElementById('search-input').addEventListener('input', applyFiltersAndSort); document.getElementById('status-filter').addEventListener('change', applyFiltersAndSort); document.getElementById('sector-filter').addEventListener('change', applyFiltersAndSort); document.getElementById('clear-filters-btn').addEventListener('click', clearAndApplyFilters); document.querySelectorAll('.sortable-header').forEach(header => { header.addEventListener('click', () => { const sortBy = header.getAttribute('data-sort-by'); if (sortBy === currentSortBy) { currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc'; } else { currentSortBy = sortBy; currentSortOrder = 'asc'; } applyFiltersAndSort(); }); }); document.getElementById('add-vehicle-btn').addEventListener('click', () => openModal('create')); document.getElementById('close-modal-btn').addEventListener('click', closeModal); document.getElementById('cancel-btn').addEventListener('click', closeModal); modalOverlay.addEventListener('click', (event) => { if (event.target === modalOverlay) { closeModal(); } }); vehicleForm.addEventListener('submit', handleFormSubmit); applyFiltersAndSort(); });
-if (!document.querySelector('#tooltip-styles')) { const tooltipStyle = `.tooltip { position: fixed; display: none; background-color: var(--color-text-primary); color: var(--color-text-light); padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 500; z-index: 1000; pointer-events: none; white-space: nowrap; }`; const styleSheet = document.createElement("style"); styleSheet.id = 'tooltip-styles'; styleSheet.innerText = tooltipStyle; document.head.appendChild(styleSheet); }
+function handleFormSubmit(event) {
+    event.preventDefault();
+    const formData = {
+        id: vehicleIdInput.value ? parseInt(vehicleIdInput.value) : Date.now(),
+        placa: document.getElementById('placa').value,
+        nomePersonalizado: document.getElementById('nomePersonalizado').value,
+        marca: document.getElementById('marca').value,
+        modelo: document.getElementById('modelo').value,
+        setor: document.getElementById('setor').value,
+        hodometro: parseInt(document.getElementById('hodometro').value),
+        status: document.getElementById('status').value,
+    };
+    if (vehicleIdInput.value) {
+        const index = vehiclesData.findIndex(v => v.id === formData.id);
+        vehiclesData[index] = formData;
+        showToast('Veículo atualizado com sucesso!', 'success');
+    } else {
+        vehiclesData.push(formData);
+        showToast('Veículo cadastrado com sucesso!', 'success');
+    }
+    closeModal();
+    clearAndApplyFilters();
+}
+
+function addEditButtonListeners() {
+    document.querySelectorAll('.edit-btn').forEach(button => {
+        button.addEventListener('click', (event) => {
+            const row = event.target.closest('tr');
+            const vehicleId = parseInt(row.getAttribute('data-id'));
+            const vehicle = vehiclesData.find(v => v.id === vehicleId);
+            if (vehicle) {
+                openModal('edit', vehicle);
+            }
+        });
+    });
+}
+
+function addToggleStatusButtonListeners() {
+    document.querySelectorAll('.toggle-status-btn').forEach(button => {
+        button.addEventListener('click', (event) => {
+            const row = event.target.closest('tr');
+            const vehicleId = parseInt(row.getAttribute('data-id'));
+            const vehicle = vehiclesData.find(v => v.id === vehicleId);
+            if (vehicle) {
+                vehicle.status = (vehicle.status === 'Ativo') ? 'Desabilitado' : 'Ativo';
+                showToast(`Status do veículo ${vehicle.placa} alterado para ${vehicle.status}!`, 'success');
+                applyFiltersAndSort();
+            }
+        });
+    });
+}
+
+function addDeleteButtonListeners() {
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', (event) => {
+            const row = event.target.closest('tr');
+            const vehicleId = parseInt(row.getAttribute('data-id'));
+            const vehicle = vehiclesData.find(v => v.id === vehicleId);
+            if (vehicle) {
+                const wantsToDelete = confirm(`Você tem certeza que deseja excluir o veículo de placa ${vehicle.placa}? Esta ação não pode ser desfeita.`);
+                if (wantsToDelete) {
+                    vehiclesData = vehiclesData.filter(v => v.id !== vehicleId);
+                    showToast(`Veículo ${vehicle.placa} excluído com sucesso!`, 'success');
+                    applyFiltersAndSort();
+                }
+            }
+        });
+    });
+}
+
+// --- LÓGICA DA NOTIFICAÇÃO TOAST ---
+function showToast(message, type = 'success') {
+    const toast = document.getElementById('toast-notification');
+    const toastMessage = document.getElementById('toast-message');
+    const toastIcon = toast.querySelector('.toast-icon');
+    toastMessage.innerText = message;
+    toast.className = `toast ${type}`;
+    toastIcon.className = `toast-icon fas ${type === 'success' ? 'fa-check-circle' : 'fa-times-circle'}`;
+    toast.classList.add('show');
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
+
+// --- INICIALIZAÇÃO E EVENT LISTENERS ---
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('search-input').addEventListener('input', applyFiltersAndSort);
+    document.getElementById('status-filter').addEventListener('change', applyFiltersAndSort);
+    document.getElementById('sector-filter').addEventListener('change', applyFiltersAndSort);
+    document.getElementById('clear-filters-btn').addEventListener('click', clearAndApplyFilters);
+    document.querySelectorAll('.sortable-header').forEach(header => {
+        header.addEventListener('click', () => {
+            const sortBy = header.getAttribute('data-sort-by');
+            if (sortBy === currentSortBy) {
+                currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSortBy = sortBy;
+                currentSortOrder = 'asc';
+            }
+            applyFiltersAndSort();
+        });
+    });
+    document.getElementById('add-vehicle-btn').addEventListener('click', () => openModal('create'));
+    document.getElementById('close-modal-btn').addEventListener('click', closeModal);
+    document.getElementById('cancel-btn').addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', (event) => {
+        if (event.target === modalOverlay) { closeModal(); }
+    });
+    vehicleForm.addEventListener('submit', handleFormSubmit);
+    applyFiltersAndSort();
+});
+
+// Adiciona o CSS do Tooltip se ele ainda não existir
+if (!document.querySelector('#tooltip-styles')) {
+    const tooltipStyle = `.tooltip { position: fixed; display: none; background-color: var(--color-text-primary); color: var(--color-text-light); padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 500; z-index: 1000; pointer-events: none; white-space: nowrap; }`;
+    const styleSheet = document.createElement("style");
+    styleSheet.id = 'tooltip-styles';
+    styleSheet.innerText = tooltipStyle;
+    document.head.appendChild(styleSheet);
+}

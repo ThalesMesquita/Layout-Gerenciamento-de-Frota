@@ -317,8 +317,10 @@ main {
     color: var(--color-blue-primary);
 }
 
+/* DEPOIS */
 .filter-bar {
-    display: flex;
+    display: grid; /* Trocamos flex por grid */
+    grid-template-columns: 3fr 1.5fr 1.5fr auto; /* Definimos as proporções */
     gap: 15px;
     margin-bottom: 20px;
     align-items: center;
@@ -326,7 +328,7 @@ main {
 
 .search-wrapper {
     position: relative;
-    flex-grow: 1;
+    /* A propriedade flex-grow: 1; não é mais necessária com o grid, podemos removê-la */
 }
 
 .search-wrapper i {
