@@ -13,7 +13,19 @@ let currentSortOrder = 'asc';
 
 // --- FUNÇÕES DE LÓGICA E RENDERIZAÇÃO ---
 
-function sortData(vehicles) { /* (código inalterado) */ return vehicles.sort((a, b) => { const valA = a[currentSortBy]; const valB = b[currentSortBy]; let comparison = 0; if (typeof valA === 'number' && typeof valB === 'number') { comparison = valA - valB; } else { comparison = String(valA).localeCompare(String(valB)); } return currentSortOrder === 'desc' ? comparison * -1 : comparison; }); }
+function sortData(vehicles) {
+    return vehicles.sort((a, b) => {
+        const valA = a[currentSortBy];
+        const valB = b[currentSortBy];
+        let comparison = 0;
+        if (typeof valA === 'number' && typeof valB === 'number') {
+            comparison = valA - valB;
+        } else {
+            comparison = String(valA).localeCompare(String(valB));
+        }
+        return currentSortOrder === 'desc' ? comparison * -1 : comparison;
+    });
+}
 
 function renderTable(vehicles) {
     const tableBody = document.getElementById('vehicle-table-body');
@@ -49,13 +61,73 @@ function renderTable(vehicles) {
     addToggleStatusButtonListeners();
 }
 
-function updateSortIcons() { /* (código inalterado) */ }
+function updateSortIcons() {
+    document.querySelectorAll('.sortable-header').forEach(header => {
+        const icon = header.querySelector('i');
+        const sortBy = header.getAttribute('data-sort-by');
+        icon.className = 'fas fa-sort';
+        header.classList.remove('sorted');
+        if (sortBy === currentSortBy) {
+            icon.className = currentSortOrder === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down';
+            header.classList.add('sorted');
+        }
+    });
+}
 
-function applyFiltersAndSort() { /* (código inalterado) */ }
+function applyFiltersAndSort() {
+    const searchTerm = document.getElementById('search-input').value.toLowerCase();
+    const statusFilter = document.getElementById('status-filter').value;
+    const sectorFilter = document.getElementById('sector-filter').value;
 
-function clearAndApplyFilters() { /* (código inalterado) */ }
+    let processedVehicles = [...vehiclesData];
 
-function initializeTooltips() { /* (código inalterado) */ }
+    if (searchTerm) {
+        processedVehicles = processedVehicles.filter(v => Object.values(v).some(val => String(val).toLowerCase().includes(searchTerm)));
+    }
+    if (statusFilter) {
+        processedVehicles = processedVehicles.filter(v => v.status === statusFilter);
+    }
+    if (sectorFilter) {
+        processedVehicles = processedVehicles.filter(v => v.setor === sectorFilter);
+    }
+
+    processedVehicles = sortData(processedVehicles);
+    
+    renderTable(processedVehicles);
+    initializeTooltips();
+    updateSortIcons();
+}
+
+function clearAndApplyFilters() {
+    document.getElementById('search-input').value = '';
+    document.getElementById('status-filter').value = '';
+    document.getElementById('sector-filter').value = '';
+    applyFiltersAndSort();
+}
+
+function initializeTooltips() {
+    const tooltippedElements = document.querySelectorAll('[data-tooltip]');
+    let tooltip = document.querySelector('.tooltip');
+    if (!tooltip) {
+        tooltip = document.createElement('div');
+        tooltip.classList.add('tooltip');
+        document.body.appendChild(tooltip);
+    }
+    
+    tooltippedElements.forEach(elem => {
+        elem.addEventListener('mouseover', () => {
+            const tooltipText = elem.getAttribute('data-tooltip');
+            tooltip.innerText = tooltipText;
+            tooltip.style.display = 'block';
+            const rect = elem.getBoundingClientRect();
+            tooltip.style.left = `${rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2)}px`;
+            tooltip.style.top = `${rect.top - tooltip.offsetHeight - 8}px`;
+        });
+        elem.addEventListener('mouseleave', () => {
+            tooltip.style.display = 'none';
+        });
+    });
+}
 
 // --- LÓGICA DO MODAL ---
 const modalOverlay = document.getElementById('modal-overlay');
@@ -63,14 +135,59 @@ const vehicleForm = document.getElementById('vehicle-form');
 const modalTitle = document.getElementById('modal-title');
 const vehicleIdInput = document.getElementById('vehicle-id');
 
-function openModal(mode, vehicleData = null) { /* (código inalterado) */ }
-function closeModal() { /* (código inalterado) */ }
-function handleFormSubmit(event) { /* (código inalterado) */ }
+function openModal(mode, vehicleData = null) {
+    vehicleForm.reset();
+    if (mode === 'create') {
+        modalTitle.innerText = 'Cadastrar Novo Veículo';
+        vehicleIdInput.value = '';
+    } else if (mode === 'edit') {
+        modalTitle.innerText = 'Editar Veículo';
+        vehicleIdInput.value = vehicleData.id;
+        document.getElementById('placa').value = vehicleData.placa;
+        document.getElementById('nomePersonalizado').value = vehicleData.nomePersonalizado;
+        document.getElementById('marca').value = vehicleData.marca;
+        document.getElementById('modelo').value = vehicleData.modelo;
+        document.getElementById('setor').value = vehicleData.setor;
+        document.getElementById('hodometro').value = vehicleData.hodometro;
+        document.getElementById('status').value = vehicleData.status;
+    }
+    modalOverlay.classList.add('visible');
+}
+
+function closeModal() {
+    modalOverlay.classList.remove('visible');
+}
+
+function handleFormSubmit(event) {
+    event.preventDefault();
+    const formData = {
+        id: vehicleIdInput.value ? parseInt(vehicleIdInput.value) : Date.now(),
+        placa: document.getElementById('placa').value,
+        nomePersonalizado: document.getElementById('nomePersonalizado').value,
+        marca: document.getElementById('marca').value,
+        modelo: document.getElementById('modelo').value,
+        setor: document.getElementById('setor').value,
+        hodometro: parseInt(document.getElementById('hodometro').value),
+        status: document.getElementById('status').value,
+    };
+
+    if (vehicleIdInput.value) {
+        const index = vehiclesData.findIndex(v => v.id === formData.id);
+        vehiclesData[index] = formData;
+        showToast('Veículo atualizado com sucesso!', 'success');
+    } else {
+        vehiclesData.push(formData);
+        showToast('Veículo cadastrado com sucesso!', 'success');
+    }
+    closeModal();
+    clearAndApplyFilters();
+}
 
 function addEditButtonListeners() {
     document.querySelectorAll('.edit-btn').forEach(button => {
         button.addEventListener('click', (event) => {
             const row = event.target.closest('tr');
+
             const vehicleId = parseInt(row.getAttribute('data-id'));
             const vehicle = vehiclesData.find(v => v.id === vehicleId);
             if (vehicle) {
@@ -80,27 +197,15 @@ function addEditButtonListeners() {
     });
 }
 
-/**
- * Adiciona 'escutadores' de clique aos botões de Habilitar/Desabilitar status.
- */
 function addToggleStatusButtonListeners() {
     document.querySelectorAll('.toggle-status-btn').forEach(button => {
         button.addEventListener('click', (event) => {
-            // 1. Pega o ID do veículo a partir do atributo 'data-id' da linha (<tr>)
             const row = event.target.closest('tr');
             const vehicleId = parseInt(row.getAttribute('data-id'));
-            
-            // 2. Encontra o veículo correspondente no nosso array de dados
             const vehicle = vehiclesData.find(v => v.id === vehicleId);
-
             if (vehicle) {
-                // 3. Inverte o status do veículo
                 vehicle.status = (vehicle.status === 'Ativo') ? 'Desabilitado' : 'Ativo';
-                
-                // 4. Mostra uma notificação de sucesso
                 showToast(`Status do veículo ${vehicle.placa} alterado para ${vehicle.status}!`, 'success');
-
-                // 5. Re-renderiza a tabela para refletir a mudança
                 applyFiltersAndSort();
             }
         });
@@ -108,13 +213,59 @@ function addToggleStatusButtonListeners() {
 }
 
 // --- LÓGICA DA NOTIFICAÇÃO TOAST ---
-function showToast(message, type = 'success') { /* (código inalterado) */ }
+function showToast(message, type = 'success') {
+    const toast = document.getElementById('toast-notification');
+    const toastMessage = document.getElementById('toast-message');
+    const toastIcon = toast.querySelector('.toast-icon');
+
+    toastMessage.innerText = message;
+    toast.className = `toast ${type}`;
+    toastIcon.className = `toast-icon fas ${type === 'success' ? 'fa-check-circle' : 'fa-times-circle'}`;
+
+    toast.classList.add('show');
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
 
 // --- INICIALIZAÇÃO E EVENT LISTENERS ---
 document.addEventListener('DOMContentLoaded', () => {
-    // (todo o código de inicialização e listeners permanece o mesmo)
-    // ...
+    document.getElementById('search-input').addEventListener('input', applyFiltersAndSort);
+    document.getElementById('status-filter').addEventListener('change', applyFiltersAndSort);
+    document.getElementById('sector-filter').addEventListener('change', applyFiltersAndSort);
+    document.getElementById('clear-filters-btn').addEventListener('click', clearAndApplyFilters);
+    
+    document.querySelectorAll('.sortable-header').forEach(header => {
+        header.addEventListener('click', () => {
+            const sortBy = header.getAttribute('data-sort-by');
+            if (sortBy === currentSortBy) {
+                currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSortBy = sortBy;
+                currentSortOrder = 'asc';
+            }
+            applyFiltersAndSort();
+        });
+    });
+    
+    document.getElementById('add-vehicle-btn').addEventListener('click', () => openModal('create'));
+    document.getElementById('close-modal-btn').addEventListener('click', closeModal);
+    document.getElementById('cancel-btn').addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', (event) => {
+        if (event.target === modalOverlay) { closeModal(); }
+    });
+    vehicleForm.addEventListener('submit', handleFormSubmit);
+
+    applyFiltersAndSort();
 });
 
-// (O código do CSS do Tooltip permanece o mesmo)
-if (!document.querySelector('#tooltip-styles')) { /* ... (código inalterado) ... */ }
+// Adiciona o CSS do Tooltip se ele ainda não existir
+if (!document.querySelector('#tooltip-styles')) {
+    const tooltipStyle = `
+        .tooltip { position: fixed; display: none; background-color: var(--color-text-primary); color: var(--color-text-light); padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 500; z-index: 1000; pointer-events: none; white-space: nowrap; }
+    `;
+    const styleSheet = document.createElement("style");
+    styleSheet.id = 'tooltip-styles';
+    styleSheet.innerText = tooltipStyle;
+    document.head.appendChild(styleSheet);
+}
