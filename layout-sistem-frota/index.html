@@ -13,7 +13,7 @@
 
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<>
 
     <div class="sidebar">
         <div class="sidebar-header">
@@ -139,10 +139,70 @@
             </section>
         </main>
     </div>
-
+<div class="modal-overlay" id="modal-overlay">
+        <div class="modal" id="vehicle-modal">
+            <div class="modal-header">
+                <h2 id="modal-title">Cadastrar Novo Veículo</h2>
+                <button class="close-modal-btn" id="close-modal-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="vehicle-form">
+                    <input type="hidden" id="vehicle-id">
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="placa">Placa</label>
+                            <input type="text" id="placa" placeholder="ABC-1234" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="nomePersonalizado">Nome Personalizado</label>
+                            <input type="text" id="nomePersonalizado" placeholder="Ex: Carro de Vendas 01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="marca">Marca</label>
+                            <input type="text" id="marca" placeholder="Ex: Fiat" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="modelo">Modelo</label>
+                            <input type="text" id="modelo" placeholder="Ex: Fiorino" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="setor">Setor</label>
+                            <select id="setor" required>
+                                <option value="">Selecione um setor</option>
+                                <option value="Diretoria">Diretoria</option>
+                                <option value="Vendas">Vendas</option>
+                                <option value="Logística">Logística</option>
+                                <option value="Operações">Operações</option>
+                                <option value="Manutenção">Manutenção</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="hodometro">Hodômetro (km)</label>
+                            <input type="number" id="hodometro" placeholder="Ex: 89500" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="status">Status</label>
+                            <select id="status" required>
+                                <option value="Ativo">Ativo</option>
+                                <option value="Desabilitado">Desabilitado</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline" id="cancel-btn">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" id="save-btn">Salvar Veículo</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="toast-notification" class="toast">
+        <i class="fas fa-check-circle toast-icon"></i>
+        <span id="toast-message">Ação realizada com sucesso!</span>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
-</body>
 
 </html>
