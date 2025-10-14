@@ -46,11 +46,10 @@ function renderTable(vehicles) {
                 <td><span class="status-badge ${vehicle.status === 'Ativo' ? 'status-active' : 'status-inactive'}">${vehicle.status}</span></td>
                 <td class="actions-cell">
                     <button class="action-btn edit-btn" data-tooltip="Editar"><i class="fas fa-pencil-alt"></i></button>
-                    <button class="action-btn" data-tooltip="Visualizar"><i class="fas fa-eye"></i></button>
                     <button class="action-btn toggle-status-btn" data-tooltip="${vehicle.status === 'Ativo' ? 'Desabilitar' : 'Habilitar'}">
                         <i class="fas ${vehicle.status === 'Ativo' ? 'fa-toggle-on status-active' : 'fa-toggle-off status-inactive'}"></i>
                     </button>
-                    <button class="action-btn" data-tooltip="Dar Baixa"><i class="fas fa-archive"></i></button>
+                    <button class="action-btn delete-btn" data-tooltip="Excluir"><i class="fas fa-trash"></i></button>
                 </td>
             </tr>
         `;
@@ -59,6 +58,7 @@ function renderTable(vehicles) {
     
     addEditButtonListeners();
     addToggleStatusButtonListeners();
+    addDeleteButtonListeners();
 }
 
 function updateSortIcons() {
@@ -114,8 +114,8 @@ function initializeTooltips() {
         document.body.appendChild(tooltip);
     }
     
-    tooltippedElements.forEach(elem => {
-        elem.addEventListener('mouseover', () => {
+    document.querySelectorAll('[data-tooltip]').forEach(elem => {
+         elem.addEventListener('mouseover', () => {
             const tooltipText = elem.getAttribute('data-tooltip');
             tooltip.innerText = tooltipText;
             tooltip.style.display = 'block';
@@ -187,7 +187,6 @@ function addEditButtonListeners() {
     document.querySelectorAll('.edit-btn').forEach(button => {
         button.addEventListener('click', (event) => {
             const row = event.target.closest('tr');
-
             const vehicleId = parseInt(row.getAttribute('data-id'));
             const vehicle = vehiclesData.find(v => v.id === vehicleId);
             if (vehicle) {
@@ -207,6 +206,25 @@ function addToggleStatusButtonListeners() {
                 vehicle.status = (vehicle.status === 'Ativo') ? 'Desabilitado' : 'Ativo';
                 showToast(`Status do veículo ${vehicle.placa} alterado para ${vehicle.status}!`, 'success');
                 applyFiltersAndSort();
+            }
+        });
+    });
+}
+
+function addDeleteButtonListeners() {
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', (event) => {
+            const row = event.target.closest('tr');
+            const vehicleId = parseInt(row.getAttribute('data-id'));
+            const vehicle = vehiclesData.find(v => v.id === vehicleId);
+
+            if (vehicle) {
+                const wantsToDelete = confirm(`Você tem certeza que deseja excluir o veículo de placa ${vehicle.placa}? Esta ação não pode ser desfeita.`);
+                if (wantsToDelete) {
+                    vehiclesData = vehiclesData.filter(v => v.id !== vehicleId);
+                    showToast(`Veículo ${vehicle.placa} excluído com sucesso!`, 'success');
+                    applyFiltersAndSort();
+                }
             }
         });
     });
