@@ -127,7 +127,7 @@ body {
     height: 100vh;
 }
 
-/* --- HEADER SUPERIOR --- */
+/* --- HEADER SUPERIOR --- */                  
 .top-header {
     background-color: var(--color-bg-card);
     padding: 20px 30px;
@@ -135,6 +135,14 @@ body {
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid var(--color-border);
+}
+
+/* Adicione esta nova regra para o cabeçalho DENTRO do <main> */
+main .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
 }
 
 .header-title h1 {
@@ -229,6 +237,12 @@ main {
     display: flex;
     align-items: center;
     gap: 20px;
+}
+
+/* Adicione esta NOVA REGRA ao seu style.css */
+.filter-card {
+    max-width: 95%; /* Limita a largura máxima do bloco de filtros */
+    margin: 0 auto 30px auto; /* Centraliza o bloco na horizontal e adiciona uma margem inferior */
 }
 
 .card-icon {
@@ -638,4 +652,92 @@ td .text-secondary {
 
 .toast-icon {
     font-size: 20px;
+}
+
+/* Adicione esta nova regra ao seu style.css */
+
+.form-grid-3-cols {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+/* Encontre ou adicione esta regra */
+.form-actions {
+    display: flex;
+    justify-content: flex-end; /* Alinha os botões à direita dentro do seu contêiner */
+    gap: 15px;
+}
+
+/* --- NOVOS ESTILOS PARA PÁGINA DE MANUTENÇÃO --- */
+
+.page-actions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.page-actions-header .title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.page-actions-header .page-icon {
+    font-size: 28px;
+    color: var(--color-text-primary);
+}
+
+.page-actions-header h2 {
+    font-size: 24px;
+    color: var(--color-text-primary);
+    font-weight: 600;
+}
+
+.page-actions-header .button-wrapper {
+    display: flex;
+    gap: 15px;
+}
+
+.filter-form-container {
+    background-color: var(--color-bg-card);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+    margin-bottom: 30px;
+}
+
+/* Garante que os inputs não tenham placeholder em negrito */
+.filter-form-container input::placeholder {
+    font-weight: 400;
+}
+
+/* Remove a div de actions que tínhamos antes para o botão buscar */
+.form-actions {
+    display: none;
+}
+
+.form-footer-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dropdown-wrapper {
+    position: relative;
+}
+
+.table-container {
+    background-color: var(--color-bg-card);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+    padding: 20px 30px;
+}
+
+.table-container .table-header {
+    justify-content: flex-end; /* Alinha o "Total: 1" à direita */
+    padding-bottom: 15px;
 }

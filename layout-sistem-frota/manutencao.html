@@ -12,49 +12,137 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <i class="fas fa-truck-fast logo-icon"></i>
-            <span class="logo-text"></span>
-        </div>
-        <ul class="sidebar-menu">
-            <li><a href="index.html"><i class="fas fa-truck"></i> Veículos</a></li>
-            <li><a href="manutencao.html" class="active"><i class="fas fa-tools"></i> Manutenção</a></li>
-            <li><a href="#"><i class="fas fa-gas-pump"></i> Abastecimento</a></li>
-            <li><a href="#"><i class="fas fa-file-invoice-dollar"></i> Financeiro</a></li>
-            <li><a href="#"><i class="fas fa-users"></i> Motoristas</a></li>
-            <li><a href="#"><i class="fas fa-chart-bar"></i> Relatórios</a></li>
-            <li><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-        </ul>
-        <div class="sidebar-footer">
-            <a href="#"><i class="fas fa-cog"></i> Configurações</a>
-        </div>
-    </div>
-
-    <div class="main-content">
-        <header class="top-header">
-            <div class="header-title">
-                <h1>Ordens de Serviço</h1>
-                <p>Gerencie pedidos de orçamento e ordens de serviço da sua frota.</p>
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-truck-fast logo-icon"></i>
+                <span class="logo-text"></span>
             </div>
-            <div class="header-actions">
-                <button class="icon-button" data-tooltip="Notificações"><i class="fas fa-bell"></i><span class="badge">3</span></button>
-                <div class="user-profile">
-                    <img src="https://i.pravatar.cc/40" alt="Avatar do Usuário">
-                    <div class="user-details">
-                        <span class="user-name">Thales</span>
-                        <span class="user-role">Administrador</span>
-                    </div>
-                    <i class="fas fa-chevron-down"></i>
+            <ul class="sidebar-menu">
+                <li><a href="index.html"><i class="fas fa-truck"></i> Veículos</a></li>
+                <li><a href="manutencao.html" class="active"><i class="fas fa-tools"></i> Manutenção</a></li>
+                <li><a href="#"><i class="fas fa-gas-pump"></i> Abastecimento</a></li>
+                <li><a href="#"><i class="fas fa-file-invoice-dollar"></i> Financeiro</a></li>
+                <li><a href="#"><i class="fas fa-users"></i> Motoristas</a></li>
+                <li><a href="#"><i class="fas fa-chart-bar"></i> Relatórios</a></li>
+                <li><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <a href="#"><i class="fas fa-cog"></i> Configurações</a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <header class="top-header">
+                <div class="header-title">
+                    <h1>Ordens de Serviço</h1>
+                    <p>Gerencie pedidos de orçamento e ordens de serviço da sua frota.</p>
                 </div>
-            </div>
-        </header>
+                <div class="header-actions">
+                    <button class="icon-button" data-tooltip="Notificações"><i class="fas fa-bell"></i><span class="badge">3</span></button>
+                    <div class="user-profile">
+                        <img src="https://i.pravatar.cc/40" alt="Avatar do Usuário">
+                        <div class="user-details">
+                            <span class="user-name">Thales</span>
+                            <span class="user-role">Administrador</span>
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </header>
 
-        <main>
-            <h2>Em breve: Filtros e Tabela de Ordens de Serviço...</h2>
-        </main>
-    </div>
+            <main>
+                <div class="page-actions-header">
+                    <div class="title-wrapper">
+                        <i class="fas fa-briefcase page-icon"></i>
+                        <h2>Ordens de Serviço</h2>
+                    </div>
+                    <div class="button-wrapper">
+                        <button class="btn btn-outline">Adicionar Pedido de Orçamento</button>
+                        <button class="btn btn-outline">Adicionar Ordem de Serviço</button>
+                    </div>
+                </div>
 
+                <form id="maintenance-filter-form" class="filter-form-container">
+                    <div class="form-grid-3-cols">
+                        <div class="form-group">
+                            <label for="os-id">ID da Ordem de Serviço</label>
+                            <input type="text" id="os-id">
+                        </div>
+                        <div class="form-group">
+                            <label for="vehicle-select">Veículo</label>
+                            <select id="vehicle-select"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="workshop-select">Credenciados</label>
+                            <select id="workshop-select"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="start-date">Data Inicial</label>
+                            <input type="date" id="start-date">
+                        </div>
+                        <div class="form-group">
+                            <label for="end-date">Data Final</label>
+                            <input type="date" id="end-date">
+                        </div>
+                        <div class="form-group">
+                            <label for="service-type">Tipo de Serviço</label>
+                            <select id="service-type">
+                                <option value="">Todos</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="maintenance-type">Tipo de Manutenção</label>
+                            <select id="maintenance-type">
+                                <option value="">Todos</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="status-select">Situação</label>
+                            <select id="status-select">
+                                <option value="">Todas</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="product-service">Produto / Serviço</label>
+                            <input type="text" id="product-service">
+                        </div>
+                    </div>
+                    
+                    <div class="form-footer-actions">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
+                        <div class="dropdown-wrapper">
+                            <button type="button" class="btn btn-outline">Extrair Relatório <i class="fas fa-chevron-down"></i></button>
+                            </div>
+                    </div>
+                </form>
+
+                <div class="table-container">
+                    <div class="table-header">
+                        <p>Total: 1</p> </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Veículo</th>
+                                    <th>Credenciado</th>
+                                    <th>Expira Em</th>
+                                    <th>Atualizado em</th>
+                                    <th>Tipo de Serviço</th>
+                                    <th>Tipo de Manutenção</th>
+                                    <th>Situação</th>
+                                    <th>Total</th>
+                                    <th>Orçamento aprovado</th>
+                                    <th>Orçamentos</th>
+                                    <th class="actions-column">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="maintenance-table-body">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
     </body>
 </html>
