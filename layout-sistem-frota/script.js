@@ -1,6 +1,9 @@
 // --- DADOS E ESTADO DA APLICAÇÃO ---
 
-let vehiclesData = [
+let vehiclesData = []; // O array começa vazio. Será preenchido pelos dados iniciais ou pelo LocalStorage.
+
+// Dados padrão para a primeira vez que o sistema for aberto
+const initialVehiclesData = [
     { id: 1, placa: 'GRL-3178', nomePersonalizado: 'Carro do Diretor', marca: 'Dodge', modelo: 'STEALTH 2000', setor: 'Diretoria', hodometro: 150234, status: 'Ativo' },
     { id: 2, placa: 'PHN-1507', nomePersonalizado: 'Veículo de Vendas 01', marca: 'Audi', modelo: 'R8 2025', setor: 'Vendas', hodometro: 120, status: 'Desabilitado' },
     { id: 3, placa: 'XYZ-1234', nomePersonalizado: 'Carro de Entregas', marca: 'Fiat', modelo: 'Fiorino 2023', setor: 'Logística', hodometro: 89500, status: 'Ativo' },
@@ -10,6 +13,21 @@ let vehiclesData = [
 
 let currentSortBy = 'placa';
 let currentSortOrder = 'asc';
+
+// --- FUNÇÕES DE PERSISTÊNCIA DE DADOS ---
+
+function saveDataToLocalStorage() {
+    localStorage.setItem('fleetData', JSON.stringify(vehiclesData));
+}
+
+function loadDataFromLocalStorage() {
+    const savedData = localStorage.getItem('fleetData');
+    if (savedData && savedData.length > 2) {
+        vehiclesData = JSON.parse(savedData);
+    } else {
+        vehiclesData = initialVehiclesData;
+    }
+}
 
 // --- FUNÇÕES DE LÓGICA E RENDERIZAÇÃO ---
 
@@ -178,6 +196,7 @@ function handleFormSubmit(event) {
         vehiclesData.push(formData);
         showToast('Veículo cadastrado com sucesso!', 'success');
     }
+    saveDataToLocalStorage();
     closeModal();
     clearAndApplyFilters();
 }
@@ -204,6 +223,7 @@ function addToggleStatusButtonListeners() {
             if (vehicle) {
                 vehicle.status = (vehicle.status === 'Ativo') ? 'Desabilitado' : 'Ativo';
                 showToast(`Status do veículo ${vehicle.placa} alterado para ${vehicle.status}!`, 'success');
+                saveDataToLocalStorage();
                 applyFiltersAndSort();
             }
         });
@@ -221,6 +241,7 @@ function addDeleteButtonListeners() {
                 if (wantsToDelete) {
                     vehiclesData = vehiclesData.filter(v => v.id !== vehicleId);
                     showToast(`Veículo ${vehicle.placa} excluído com sucesso!`, 'success');
+                    saveDataToLocalStorage();
                     applyFiltersAndSort();
                 }
             }
@@ -244,10 +265,13 @@ function showToast(message, type = 'success') {
 
 // --- INICIALIZAÇÃO E EVENT LISTENERS ---
 document.addEventListener('DOMContentLoaded', () => {
+    loadDataFromLocalStorage();
+    
     document.getElementById('search-input').addEventListener('input', applyFiltersAndSort);
     document.getElementById('status-filter').addEventListener('change', applyFiltersAndSort);
     document.getElementById('sector-filter').addEventListener('change', applyFiltersAndSort);
     document.getElementById('clear-filters-btn').addEventListener('click', clearAndApplyFilters);
+    
     document.querySelectorAll('.sortable-header').forEach(header => {
         header.addEventListener('click', () => {
             const sortBy = header.getAttribute('data-sort-by');
@@ -260,6 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
             applyFiltersAndSort();
         });
     });
+    
     document.getElementById('add-vehicle-btn').addEventListener('click', () => openModal('create'));
     document.getElementById('close-modal-btn').addEventListener('click', closeModal);
     document.getElementById('cancel-btn').addEventListener('click', closeModal);
@@ -267,6 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.target === modalOverlay) { closeModal(); }
     });
     vehicleForm.addEventListener('submit', handleFormSubmit);
+
     applyFiltersAndSort();
 });
 
