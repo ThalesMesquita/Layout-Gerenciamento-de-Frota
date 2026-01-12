@@ -64,6 +64,6 @@ Como este é um projeto de estudo, existem várias melhorias que podem ser imple
 [ ] Desenvolver as outras telas do sistema (Manutenção, Financeiro, etc.) seguindo a mesma identidade visual.
 
 📜 Licença
-Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
+Este projeto está sob a licença MIT.
 
 Feito por Thales e Júnior
